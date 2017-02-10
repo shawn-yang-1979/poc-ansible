@@ -1,0 +1,27 @@
+---
+- hosts: ap-server
+  remote_user: vagrant
+  become: yes
+
+  vars_prompt:
+  - name: mongodb_user_admin_account
+    prompt: mongodb user admin account
+    default: userAdmin  
+    private: no  
+  - name: mongodb_user_admin_password
+    prompt: mongodb user admin password
+    default: userAdmin
+  - name: mongodb_ap_database
+    prompt: mongodb ap database
+    default: AP
+    private: no
+  - name: mongodb_ap_account
+    prompt: mongodb ap account
+    default: apAdmin
+    private: no  
+  - name: mongodb_ap_password
+    prompt: mongodb ap password
+    default: apAdmin  
+
+  roles:
+    - ap-server

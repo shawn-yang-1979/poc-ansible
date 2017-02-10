@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  remote_user: vagrant
+  become: yes
+  
+  roles:
+    - solution
+    - sonatype-docker-nexus

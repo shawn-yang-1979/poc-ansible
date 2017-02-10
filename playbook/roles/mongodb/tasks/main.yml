@@ -1,0 +1,45 @@
+---
+- name: do apt-get update
+  apt: 
+    update_cache: yes
+
+- name: make sure mongodb key is present
+  apt_key:
+    id: 0C49F3730359A14518585931BC711F9BA15703C6
+    keyserver: keyserver.ubuntu.com
+    state: present
+
+- name: make sure mongodb repository is added
+  apt_repository:
+    repo: deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse
+    state: present
+
+- name: do apt-get update
+  apt: 
+    update_cache: yes
+    
+- name: make sure mongodb is installed
+  apt: 
+    name: mongodb-org 
+    state: latest
+    
+- name: make sure mongodb service is enabled and up and running   
+  service:
+    name: mongod
+    enabled: yes
+    state: started
+
+- name: make sure mongodb can be connected from remote (add bindIp in /etc/mongod.conf)
+  lineinfile:
+    dest: /etc/mongod.conf
+    regexp: '^  bindIp'
+    line: '  bindIp: 127.0.0.1,{{ ansible_eth1.ipv4.address }}'
+    
+- name: make sure python-pip is installed, then we can use pip to install pymongo
+  apt: 
+    name: python-pip 
+    state: latest
+    
+- name: make sure pymongo is installed to control mongodb.
+  pip:
+    name: pymongo

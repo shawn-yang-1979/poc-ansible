@@ -1,0 +1,5 @@
+---
+dependencies:
+  - { role: mongodb }
+  - { role: oracle-java7 }
+  - { role: solution }

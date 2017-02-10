@@ -1,0 +1,23 @@
+---
+- name: 'make sure mongodb user is created ({{ mongodb_user_admin_account }})'
+  mongodb_user:
+    name: '{{ mongodb_user_admin_account }}'
+    password: '{{ mongodb_user_admin_password }}'
+    roles: userAdminAnyDatabase
+    database: admin
+    state: present
+    
+- name: 'make sure mongodb user is created ({{ mongodb_ap_account }})'
+  mongodb_user:
+    login_user: '{{ mongodb_user_admin_account }}'
+    login_password: '{{ mongodb_user_admin_password }}'
+    name: '{{ mongodb_ap_account }}'
+    password: '{{ mongodb_ap_password }}'
+    roles: dbOwner
+    database: '{{ mongodb_ap_database }}'
+    state: present
+    
+- name: create a directory if it doesn't exist
+  file:
+    path: /solution/ap-server
+    state: directory

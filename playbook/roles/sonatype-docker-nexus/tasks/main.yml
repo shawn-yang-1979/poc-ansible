@@ -1,0 +1,40 @@
+---
+# https://hub.docker.com/r/sonatype/nexus/
+#
+# To run (if port 8081 is open on your host):
+# docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss
+#
+# To determine the port that the container is listening on:
+# docker ps -l
+#
+# To test:
+# curl http://localhost:8081/nexus/service/local/status
+# 
+# Default credentials are: admin / admin123
+#
+# Mount a host directory as the volume.
+# mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data 
+# docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/sonatype-work sonatype/nexus
+- name: create a directory if it doesn't exist
+  file:
+    path: /solution/nexus
+    state: directory
+    owner: 200
+    recurse: yes
+
+- name: Create a data container
+  docker_container:
+    name: nexus
+    image: sonatype/nexus
+    published_ports: 8081
+    volumes:
+      - /solution/nexus:/sonatype-work
+
+#- name: mount product image folder share
+#  mount: 
+#    state: mounted
+#    fstype: cifs 
+#    opts: 'domain=delta.corp,username=SERVICE.TBSVRADMIN,password=!Q2w#E4r%T6y&U8i,file_mode=0644,dir_mode=0644' 
+#    src: //DeltaFileServer.delta.corp/File02/TBStorage_DRC
+#    name: /mnt/tb-repository
+#    
