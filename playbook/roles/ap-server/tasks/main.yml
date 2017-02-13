@@ -21,3 +21,21 @@
   file:
     path: /solution/ap-server
     state: directory
+
+- name: make sure lxml is installed to use maven
+  pip:
+    name: lxml
+    
+- maven_artifact:
+    group_id: com.shawnyang.poc.maven
+    artifact_id: poc-maven-assembly
+    version: 0.1.14
+    classifier: dist-prd
+    extension: zip
+    repository_url: 'http://192.168.100.101:18081/nexus/content/groups/public/'
+    dest: /solution/ap-server/poc-maven-assembly.zip
+    
+- unarchive:
+    src: /solution/ap-server/poc-maven-assembly.zip
+    dest: /solution/ap-server
+    remote_src: yes

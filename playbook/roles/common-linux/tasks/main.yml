@@ -1,0 +1,5 @@
+---
+- name: make sure essential packages are installed
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:    
+    - unzip

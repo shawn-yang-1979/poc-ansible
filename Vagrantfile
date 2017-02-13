@@ -17,6 +17,11 @@ Vagrant.configure("2") do |config|
 	  type: "shell", 
 	  preserve_order: true,
 	  path: "shell/install-ansible.sh"	  
+    #This is to increase memory	  
+    control.vm.provider "virtualbox" do |virtualbox|
+      virtualbox.memory = 2048
+      virtualbox.cpus = 2
+    end	  
   end
   config.vm.define "backend" do |backend|
     backend.vm.box = "ubuntu/trusty64"
@@ -25,6 +30,10 @@ Vagrant.configure("2") do |config|
       type: "shell", 
       preserve_order: true,
       path: "shell/append-authorized-keys.sh"
+    backend.vm.provider "virtualbox" do |virtualbox|
+      virtualbox.memory = 2048
+      virtualbox.cpus = 2
+    end	        
   end
   (1..2).each do |i|
     config.vm.define "aggregator-#{i}" do |aggregator|

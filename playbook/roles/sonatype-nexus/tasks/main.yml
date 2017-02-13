@@ -1,0 +1,52 @@
+---    
+- name: make sure a directory is created
+  file:
+    path: /solution/sonatype-nexus
+    state: directory
+    
+- name: Download the latest version and unarchive it.
+  unarchive:
+    src: 'https://download.sonatype.com/nexus/oss/nexus-{{ nexus_version }}-bundle.tar.gz'
+    dest: /solution/sonatype-nexus
+    remote_src: yes
+
+- name: make sure a link is created
+  file:
+    src: '/solution/sonatype-nexus/nexus-{{ nexus_version }}'
+    dest: '/solution/sonatype-nexus/nexus'
+    state: link
+
+- name: make sure nexus can be run as a service (1)
+  copy:
+    src: /solution/sonatype-nexus/nexus/bin/nexus
+    dest: /etc/init.d/nexus
+    mode: 0755
+    owner: root
+
+- name: make sure nexus can be run as a service (2)
+  lineinfile:
+    dest: /etc/init.d/nexus
+    regexp: '^#?RUN_AS_USER='
+    line: 'RUN_AS_USER=root'
+
+- name: make sure nexus can be run as a service (3)
+  lineinfile:
+    dest: /etc/init.d/nexus
+    regexp: '^#?NEXUS_HOME='
+    line: 'NEXUS_HOME=/solution/sonatype-nexus/nexus'    
+
+- name: make sure nexus can be run as a service (4)
+  lineinfile:
+    dest: /etc/init.d/nexus
+    regexp: '^#?PIDDIR='
+    line: 'PIDDIR=/var/run'    
+    
+- name: make sure nexus is enabled as a service
+  service:
+    name: nexus
+    enabled: yes
+
+- name: make sure nexus is up and running
+  service:
+    name: nexus
+    state: started

@@ -4,5 +4,6 @@
   become: yes
   
   roles:
-    - solution
-    - sonatype-docker-nexus
+    - common-linux
+    - docker-sonatype-nexus
+    - { role: sonatype-nexus, nexus_version: 2.14.2-01 }

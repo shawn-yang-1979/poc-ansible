@@ -24,4 +24,5 @@
     default: apAdmin  
 
   roles:
+    - common-linux
     - ap-server

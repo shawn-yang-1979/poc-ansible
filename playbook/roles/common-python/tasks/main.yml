@@ -1,0 +1,10 @@
+---
+- name: make sure essential python packages are installed
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:    
+    - python-dev
+    - libxml2-dev
+    - libxslt-dev
+    - lib32z1-dev
+    - python3-lxml
+    - python-pip

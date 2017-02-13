@@ -8,8 +8,12 @@
     name: mosquitto 
     state: latest
   
-- name: make sure mosquitto is enabled and up and running
+- name: make sure mosquitto is enabled
   service:
     name: mosquitto
     enabled: yes
-    state: started
+    
+- name: make sure mosquitto is up and running
+  service:
+    name: mosquitto
+    state: started    

@@ -3,3 +3,6 @@
 
 [backend-mqtt-server]
 192.168.100.201
+
+[aggregator]
+192.168.200.[101:102]

@@ -1,0 +1,19 @@
+---
+# https://hub.docker.com/r/sonatype/nexus/
+- name: create a directory if it doesn't exist
+  file:
+    path: /solution/docker-sonatype-nexus/nexus-data
+    state: directory
+    owner: 200
+    recurse: yes
+
+- name: run nexus docker container
+  docker_container:
+    name: nexus
+    image: sonatype/nexus
+    published_ports: 18081:8081
+    restart_policy: unless-stopped
+    state: started
+    volumes:
+      - /solution/docker-sonatype-nexus/nexus-data:/sonatype-work
+    env: MAX_HEAP=256m, MIN_HEAP=128m
