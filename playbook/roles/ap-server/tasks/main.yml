@@ -5,6 +5,7 @@
     password: '{{ mongodb_user_admin_password }}'
     roles: userAdminAnyDatabase
     database: admin
+    update_password: on_create
     state: present
     
 - name: 'make sure mongodb user is created ({{ mongodb_ap_account }})'
@@ -15,6 +16,7 @@
     password: '{{ mongodb_ap_password }}'
     roles: dbOwner
     database: '{{ mongodb_ap_database }}'
+    update_password: on_create
     state: present
     
 - name: create a directory if it doesn't exist
@@ -25,8 +27,9 @@
 - name: make sure lxml is installed to use maven
   pip:
     name: lxml
-    
-- maven_artifact:
+
+- name: download artifact from maven repository    
+  maven_artifact:
     group_id: com.shawnyang.poc.maven
     artifact_id: poc-maven-assembly
     version: 0.1.14
@@ -34,8 +37,12 @@
     extension: zip
     repository_url: 'http://192.168.100.101:18081/nexus/content/groups/public/'
     dest: /solution/ap-server/poc-maven-assembly.zip
-    
-- unarchive:
+
+- name: unarchive artifact
+  unarchive:
     src: /solution/ap-server/poc-maven-assembly.zip
     dest: /solution/ap-server
     remote_src: yes
+    
+- name: run startup command
+  command: /solution/ap-server/startup.sh
